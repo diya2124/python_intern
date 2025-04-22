@@ -1,10 +1,25 @@
-
 import re
 import requests
 from bs4 import BeautifulSoup
 
 def analyze_markdown(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
+    """
+    Analyze a Markdown (.md) file to count words, headings, links, and images.
+    validates all hyperlinks and classifies them as valid or broken.
+
+    Parameters:
+    file_path
+
+    Returns:
+    dict: A dictionary containing the analysis report with the following keys:
+          - Total Words
+          - Headings
+          - Links Found
+          - Valid Links
+          - Broken Links
+          - Images
+    """
+    with open(file_path, 'r',) as f:
         content = f.read()
 
     word_count = len(content.split())
@@ -37,6 +52,10 @@ def analyze_markdown(file_path):
     return report
 
 if __name__ == "__main__":
+    """
+    Main execution block.
+    Set the file path to a Markdown file and print its analysis report.
+    """
     file_path = r'C:\Users\diyac\OneDrive\Desktop\internship\python_intern\sample.md'
     report = analyze_markdown(file_path)
     print(report)
