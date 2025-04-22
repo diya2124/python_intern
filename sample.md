@@ -1,6 +1,6 @@
 hello
 today is Tuesday.
-![alt text](<WhatsApp Image 2025-03-21 at 21.57.21_aac0adb7.jpg>)
+C:\Users\diyac\OneDrive\Desktop\internship\python_intern\image.jpg
 
 # Sample Markdown
 
