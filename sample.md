@@ -1,7 +1,5 @@
 hello
 today is Tuesday.its very hot today.
-<!-- C:\Users\diyac\OneDrive\Desktop\internship\python_intern\image.jpg -->
-C:\Users\diyac\OneDrive\Desktop\internship\python_intern\image.jpg
 C:\Users\diyac\OneDrive\Desktop\internship\python_intern\image2.
 ![alt text](<WhatsApp Image 2025-03-17 at 09.24.50_8914a6a5.jpg>)
 
