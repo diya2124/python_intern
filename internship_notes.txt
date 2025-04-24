@@ -1,6 +1,0 @@
-git status
-only those particular files must be in green colour
-then git add .
-git pull
-git commit -m name of branch
-git push origin  branch name
