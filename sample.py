@@ -1,11 +1,12 @@
 import re
 import requests
-from bs4 import BeautifulSoup
+import os
+
 
 def analyze_markdown(file_path):
     """
     Analyze a Markdown (.md) file to count words, headings, links, and images.
-    validates all hyperlinks and classifies them as valid or broken.
+    Validates all hyperlinks and classifies them as valid or broken.
 
     Parameters:
     file_path
@@ -18,8 +19,13 @@ def analyze_markdown(file_path):
           - Valid Links
           - Broken Links
           - Images
+          If the file does not exist, returns None.
     """
-    with open(file_path, 'r',) as f:
+    if not os.path.exists(file_path):
+        print(f"Error: File not found -> {file_path}")
+        return None
+
+    with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
     word_count = len(content.split())
@@ -51,6 +57,7 @@ def analyze_markdown(file_path):
 
     return report
 
+
 if __name__ == "__main__":
     """
     Main execution block.
@@ -58,4 +65,5 @@ if __name__ == "__main__":
     """
     file_path = r'C:\Users\diyac\OneDrive\Desktop\internship\python_intern\sample.md'
     report = analyze_markdown(file_path)
-    print(report)
+    if report:
+        print(report)
