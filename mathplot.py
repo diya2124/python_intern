@@ -1,7 +1,5 @@
-# plot_analysis.py
-
 import matplotlib.pyplot as plt
-from sample import analyze_markdown
+from sample import analyze_markdown, load_config  # Import load_config to load the configuration
 
 def generate_chart(report):
     """
@@ -15,6 +13,11 @@ def generate_chart(report):
         report["Valid Links"],
         report["Images"]
     ]
+
+    # Check if values are valid
+    if not all(isinstance(value, (int, float)) for value in values):
+        print("⚠️ Invalid data found in the report.")
+        return
 
     plt.figure(figsize=(9, 6))
     bars = plt.bar(labels, values, color=['skyblue', 'orange', 'lightgreen', 'green', 'salmon'])
@@ -30,10 +33,19 @@ def generate_chart(report):
     plt.savefig("markdown_analysis_chart.png")
     print("Chart saved as markdown_analysis_chart.png")
 
-
 if __name__ == "__main__":
+    # Load the config
+    config = load_config()
+
+    # Define the path to your markdown file
     file_path = r'C:\Users\diyac\OneDrive\Desktop\internship\python_intern\sample.md'
-    report = analyze_markdown(file_path)
+
+    # Pass the file path and config to analyze_markdown
+    report = analyze_markdown(file_path, config)
+
+    # Debug: Check the report
     if report:
-        print(report)
+        print("✅ Report Generated:", report)
         generate_chart(report)
+    else:
+        print("❌ Report not generated. Please check the analysis function.")
