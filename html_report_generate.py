@@ -1,8 +1,13 @@
 import os
 import matplotlib.pyplot as plt
-from sample import analyze_markdown
+from sample import analyze_markdown, load_config
 
-def generate_chart(report, output_path='chart.png'):
+def generate_chart(report, config, output_path='chart.png'):
+    visual = config.get("visual_report", {})
+    width = visual.get("chart_width", 10)
+    height = visual.get("chart_height", 20)
+    colors = visual.get("link_colors", ['skyblue', 'purple', 'lightgreen', 'green', 'salmon'])
+
     labels = ["Words", "Headings", "Links", "Valid Links", "Images"]
     values = [
         report["Total Words"],
@@ -12,26 +17,38 @@ def generate_chart(report, output_path='chart.png'):
         report["Images"]
     ]
 
-    plt.figure(figsize=(9, 6))
-    bars = plt.bar(labels, values, color=['skyblue', 'orange', 'lightgreen', 'green', 'salmon'])
+    # Guard against invalid values
+    if not all(isinstance(v, (int, float)) for v in values):
+        print("⚠️ Invalid data found in the report. Cannot generate chart.")
+        return
+
+    plt.figure(figsize=(width, height))
+    bars = plt.bar(labels, values, color=colors)
+
     for bar in bars:
         yval = bar.get_height()
-        plt.text(bar.get_x() + bar.get_width() / 2, yval + 5, int(yval), ha='center')
-    
-    plt.title("Markdown Analysis")
+        plt.text(bar.get_x() + bar.get_width() / 2, yval + 2, int(yval), ha='center')
+
+    plt.title("Markdown File Analysis")
     plt.ylabel("Count")
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     plt.tight_layout()
     plt.savefig(output_path)
     plt.close()
+    print(f"📊 Chart saved as {output_path}")
 
-def generate_html_report(report, chart_path='chart.png', output_file='report.html'):
+def generate_html_report(report, config, chart_path='chart.png', output_file='report.html'):
+    visual = config.get("visual_report", {})
+    font = visual.get("font_family", "Arial, sans-serif")
+    margin = visual.get("margin", "20px")
+    color = visual.get("content_color", "black")
+
     html_content = f"""
     <html>
     <head>
         <title>Markdown Analysis Report</title>
         <style>
-            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            body {{ font-family: {font}; margin: {margin}; color: {color}; }}
             h1 {{ color: #333; }}
             table {{ border-collapse: collapse; width: 50%; }}
             th, td {{ border: 1px solid #ccc; padding: 8px; text-align: left; }}
@@ -60,8 +77,13 @@ def generate_html_report(report, chart_path='chart.png', output_file='report.htm
     print(f"✅ HTML report saved as {output_file}")
 
 if __name__ == "__main__":
+    config = load_config()
     file_path = r'C:\Users\diyac\OneDrive\Desktop\internship\python_intern\sample.md'
-    report = analyze_markdown(file_path)
+    report = analyze_markdown(file_path, config)
+
     if report:
-        generate_chart(report)
-        generate_html_report(report)
+        print("✅ Report Generated:", report)
+        generate_chart(report, config)
+        generate_html_report(report, config)
+    else:
+        print("❌ Failed to generate report.")

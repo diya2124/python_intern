@@ -1,0 +1,22 @@
+{
+    "link_validation": {
+        "timeout": 5,
+        "user_agent": "Mozilla/5.0",
+        "validate_links": true,
+        "allow_redirects": true
+    },
+    "analysis": {
+        "include_images": true,
+        "include_headings": true,
+        "include_links": true,
+        "min_word_length": 3
+    },
+    "visual_report": {
+        "chart_width": 10,
+        "chart_height": 9,
+        "link_colors": ["skyblue","violet","blue","purple"],
+        "content_color": "purple",
+        "font_family": "Arial, sans-serif",
+        "margin": "20px"
+    }
+}

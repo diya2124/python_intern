@@ -1,69 +1,48 @@
+import json
 import re
-import requests
 import os
+import requests
 
+def load_config(path="config.json"):
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)
 
-def analyze_markdown(file_path):
-    """
-    Analyze a Markdown (.md) file to count words, headings, links, and images.
-    Validates all hyperlinks and classifies them as valid or broken.
-
-    Parameters:
-    file_path
-
-    Returns:
-    dict: A dictionary containing the analysis report with the following keys:
-          - Total Words
-          - Headings
-          - Links Found
-          - Valid Links
-          - Broken Links
-          - Images
-          If the file does not exist, returns None.
-    """
-    if not os.path.exists(file_path):
-        print(f"Error: File not found -> {file_path}")
-        return None
-
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    word_count = len(content.split())
-    headings = len(re.findall(r'^#{1,6} ', content, re.MULTILINE))
-    links = re.findall(r'\[.*?\]\((.*?)\)', content)
-    images = re.findall(r'!\[.*?\]\((.*?)\)', content)
-
-    valid_links = 0
-    broken_links = []
-
-    for url in links:
-        try:
-            r = requests.head(url, allow_redirects=True, timeout=5)
-            if r.status_code == 200:
-                valid_links += 1
-            else:
-                broken_links.append(url)
-        except requests.RequestException:
-            broken_links.append(url)
-
+def analyze_markdown(filepath, config):
     report = {
-        "Total Words": word_count,
-        "Headings": headings,
-        "Links Found": len(links),
-        "Valid Links": valid_links,
-        "Broken Links": broken_links,
-        "Images": len(images)
+        "Total Words": 0,
+        "Headings": 0,
+        "Links Found": 0,
+        "Valid Links": 0,
+        "Broken Links": [],
+        "Images": 0
     }
 
+    with open(filepath, "r", encoding="utf-8") as file:
+        content = file.read()
+
+    words = [w for w in re.findall(r'\b\w+\b', content) if len(w) >= config["analysis"]["min_word_length"]]
+    report["Total Words"] = len(words)
+
+    if config["analysis"]["include_headings"]:
+        report["Headings"] = len(re.findall(r'^#+ ', content, re.MULTILINE))
+
+    if config["analysis"]["include_links"]:
+        links = re.findall(r'\[(.*?)\]\((https?://[^\s)]+)\)', content)
+        report["Links Found"] = len(links)
+
+        if config["link_validation"]["validate_links"]:
+            headers = {"User-Agent": config["link_validation"]["user_agent"]}
+            for text, url in links:
+                try:
+                    res = requests.head(url, timeout=config["link_validation"]["timeout"], allow_redirects=config["link_validation"]["allow_redirects"], headers=headers)
+                    if res.status_code < 400:
+                        report["Valid Links"] += 1
+                    else:
+                        report["Broken Links"].append(url)
+                except:
+                    report["Broken Links"].append(url)
+
+    if config["analysis"]["include_images"]:
+        report["Images"] = len(re.findall(r'!\[.*?\]\((.*?)\)', content))
+
     return report
-
-
-if __name__ == "__main__":
-    """
-    Main execution block.
-    Set the file path to a Markdown file and print its analysis report.
-    """
-    file_path = r'C:\Users\diyac\OneDrive\Desktop\internship\python_intern\sample.md'
-    report = analyze_markdown(file_path)
-    if report:
-        print(report)
