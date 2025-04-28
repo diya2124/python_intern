@@ -1,22 +1,26 @@
 {
+    "__comment": "This JSON config defines settings for link validation, content analysis, and visual report generation.",
     "link_validation": {
-        "timeout": 5,
-        "user_agent": "Mozilla/5.0",
-        "validate_links": true,
-        "allow_redirects": true
+        "__comment": "Settings related to link validation during the analysis.",
+        "timeout": 5,  // Timeout in seconds for link validation
+        "user_agent": "Mozilla/5.0",  // User agent string to be used for requests
+        "validate_links": true,  // Enable or disable link validation
+        "allow_redirects": true  // Allow redirects during link validation
     },
     "analysis": {
-        "include_images": true,
-        "include_headings": true,
-        "include_links": true,
-        "min_word_length": 3
+        "__comment": "Settings for content analysis, including what to include and minimum word length.",
+        "include_images": true,  // Include images in the analysis
+        "include_headings": true,  // Include headings in the analysis
+        "include_links": true,  // Include links in the analysis
+        "min_word_length": 3  // Minimum word length to be considered in the analysis
     },
     "visual_report": {
-        "chart_width": 10,
-        "chart_height": 9,
-        "link_colors": ["skyblue","violet","blue","purple"],
-        "content_color": "purple",
-        "font_family": "Arial, sans-serif",
-        "margin": "20px"
+        "__comment": "Settings for the visual report, such as chart sizes and colors.",
+        "chart_width": 10,  // Width of the visual chart
+        "chart_height": 9,  // Height of the visual chart
+        "link_colors": ["skyblue", "violet", "blue", "purple"],  // List of colors for links
+        "content_color": "purple",  // Color for the content text
+        "font_family": "Arial, sans-serif",  // Font family for the visual report
+        "margin": "20px"  // Margin around the report
     }
 }

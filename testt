@@ -1,0 +1,47 @@
+def load_config(path="config.json"):
+    """
+    Loads the configuration from a JSON file and validates its structure.
+    
+    Args:
+        path (str): The path to the JSON configuration file. Defaults to "config.json".
+    
+    Returns:
+        dict: The loaded configuration if valid.
+    
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
+        json.JSONDecodeError: If the JSON in the file is malformed.
+        ValueError: If the configuration structure is invalid.
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            config = json.load(file)
+    except FileNotFoundError:
+        print(f"❌ Error: The file {path} was not found.")
+        raise
+    except json.JSONDecodeError as e:
+        print(f"❌ Error: Failed to decode JSON in {path}. Please check the file for errors.")
+        print(f"Details: {e}")
+        raise
+    except Exception as e:
+        print(f"❌ Unexpected error while loading {path}: {str(e)}")
+        raise
+    
+    # Validate the structure of the configuration
+    if not isinstance(config, dict):
+        raise ValueError("Configuration must be a dictionary.")
+    
+    required_keys = ["link_validation", "analysis", "visual_report"]
+    for key in required_keys:
+        if key not in config:
+            raise ValueError(f"Missing required key: {key} in configuration.")
+
+    # Further validation of expected keys inside each section
+    if not isinstance(config["link_validation"], dict):
+        raise ValueError("Invalid structure: 'link_validation' should be a dictionary.")
+    if not isinstance(config["analysis"], dict):
+        raise ValueError("Invalid structure: 'analysis' should be a dictionary.")
+    if not isinstance(config["visual_report"], dict):
+        raise ValueError("Invalid structure: 'visual_report' should be a dictionary.")
+    
+    return config
