@@ -1,5 +1,5 @@
 {
-    "__comment": "This JSON config defines settings for link validation, content analysis, and visual report generation.",
+    "__comment": "This JSON Config defines settings for link validation, content analysis, and visual report generation.",
     "link_validation": {
         "__comment": "Settings related to link validation during the analysis.",
         "timeout": 5,  // Timeout in seconds for link validation
