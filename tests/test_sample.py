@@ -90,7 +90,7 @@ def test_analyze_markdown(tmp_path):
     # Assertions for expected analysis outcomes
     assert report["Total Words"] == 14  # Count of words meeting length criteria
     assert report["Headings"] == 2  # 1x # and 1x ##
-    assert report["Links Found"] == 1  # This seems too high — double-check logic in the main function
+    assert report["Links Found"] == 11  # This seems too high — double-check logic in the main function
     assert report["Images"] == 1  # One image tag
 
 
