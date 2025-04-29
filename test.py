@@ -57,4 +57,4 @@ def test_generate_html_report_content():
         assert "<img src=\"" in content
 
     os.remove(CHART_PATH)
-    os.remove(REPORT_PATH)
+    os.remove(REPORT_PATH) 
