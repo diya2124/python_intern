@@ -1,4 +1,6 @@
 import os
+import matplotlib
+matplotlib.use('Agg')  # Use a backend that doesn't require a display
 import matplotlib.pyplot as plt
 from sample import analyze_markdown
 
