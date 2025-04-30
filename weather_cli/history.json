@@ -117,5 +117,23 @@
       "condition": "overcast clouds",
       "timestamp": "2025-04-30T13:03:53.850110"
     }
+  },
+  {
+    "city": "chennai",
+    "data": {
+      "location": "Chennai",
+      "temperature": 32.38,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T13:31:10.375127"
+    }
+  },
+  {
+    "city": "raipur",
+    "data": {
+      "location": "Raipur",
+      "temperature": 37.96,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T13:32:37.510909"
+    }
   }
 ]
