@@ -1,0 +1,139 @@
+[
+  {
+    "timestamp": "2025-04-30T14:45:21",
+    "city": "London",
+    "temperature": 14.2,
+    "description": "light rain",
+    "humidity": 87
+  },
+  {
+    "timestamp": "2025-04-30T15:10:47",
+    "city": "Delhi",
+    "temperature": 31.5,
+    "description": "clear sky",
+    "humidity": 42
+  },
+  {
+    "city": "London",
+    "temperature": 8.31,
+    "description": "few clouds",
+    "humidity": 83,
+    "timestamp": "2025-04-30T11:22:00.561362"
+  },
+  {
+    "city": "London",
+    "temperature": 8.31,
+    "description": "few clouds",
+    "humidity": 83,
+    "timestamp": "2025-04-30T11:22:25.542087"
+  },
+  {
+    "city": "Mumbai",
+    "temperature": 30.01,
+    "description": "clear sky",
+    "humidity": 60,
+    "timestamp": "2025-04-30T11:22:44.070493"
+  },
+  {
+    "city": "Tirupur",
+    "temperature": 35.14,
+    "description": "overcast clouds",
+    "humidity": 38,
+    "timestamp": "2025-04-30T11:25:25.601704"
+  },
+  {
+    "city": "London",
+    "temperature": 8.57,
+    "description": "few clouds",
+    "humidity": 83,
+    "timestamp": "2025-04-30T11:26:59.636944"
+  },
+  {
+    "city": "London",
+    "temperature": 8.57,
+    "description": "few clouds",
+    "humidity": 83,
+    "timestamp": "2025-04-30T11:35:12.560393"
+  },
+  {
+    "city": "London",
+    "data": {
+      "location": "London",
+      "temperature": 8.46,
+      "condition": "few clouds",
+      "timestamp": "2025-04-30T11:51:04.754978"
+    }
+  },
+  {
+    "city": "London",
+    "data": {
+      "location": "London",
+      "temperature": 8.46,
+      "condition": "few clouds",
+      "timestamp": "2025-04-30T11:52:36.873272"
+    }
+  },
+  {
+    "city": "London",
+    "data": {
+      "location": "London",
+      "temperature": 8.46,
+      "condition": "few clouds",
+      "timestamp": "2025-04-30T11:52:39.804312"
+    }
+  },
+  {
+    "city": "London",
+    "data": {
+      "location": "London",
+      "temperature": 9.17,
+      "condition": "few clouds",
+      "timestamp": "2025-04-30T11:58:36.539483"
+    }
+  },
+  {
+    "city": "goa",
+    "data": {
+      "location": "Goa",
+      "temperature": 38.48,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T12:00:23.086966"
+    }
+  },
+  {
+    "city": "indore",
+    "data": {
+      "location": "Indore",
+      "temperature": 38.56,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T12:00:37.929322"
+    }
+  },
+  {
+    "city": "thrissur",
+    "data": {
+      "location": "Thrissur",
+      "temperature": 32.24,
+      "condition": "overcast clouds",
+      "timestamp": "2025-04-30T13:03:53.850110"
+    }
+  },
+  {
+    "city": "chennai",
+    "data": {
+      "location": "Chennai",
+      "temperature": 32.38,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T13:31:10.375127"
+    }
+  },
+  {
+    "city": "raipur",
+    "data": {
+      "location": "Raipur",
+      "temperature": 37.96,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T13:32:37.510909"
+    }
+  }
+]
