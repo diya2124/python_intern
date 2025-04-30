@@ -30,3 +30,37 @@ git clone https://github.com/diya2124/python_intern.git
 
 
 
+
+
+
+
+
+#  Weather Dashboard CLI
+
+A simple Python-based command-line tool that fetches and displays current weather conditions using the OpenWeatherMap API. It also stores your query history locally.
+
+---
+
+## Features
+
+-->Fetch current weather by entering a city name.
+-->Displays temperature, condition, and timestamp.
+-->Handles missing or invalid city names.
+-->Stores fetched weather data in a local JSON file (history.json).
+-->Caches results to reduce API calls.
+-->Reads the API key securely from a .env file.
+
+# To run
+python weather.py
+
+# Sample output
+ Enter city name: London
+
+Weather in London:
+Temperature: 12.34°C
+Condition: Clear sky
+Timestamp: 2025-04-30T15:30:10
+
+# Not found
+  Error: No such city found: UnknownCity
+
