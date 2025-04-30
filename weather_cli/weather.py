@@ -34,20 +34,27 @@ class WeatherDashboard:
 
         try:
             response = requests.get(self.base_url, params=params)
-            if response.status_code == 404:
+
+            if response.status_code == 401:
+                return {"error": "Invalid API key. Please check your .env file."}
+            elif response.status_code == 404:
                 return {"error": f"No such city found: {city}"}
+
             response.raise_for_status()
             data = response.json()
 
-            weather_info = {
-                "city": city,
-                "data": {
-                    "location": data.get("name"),
-                    "temperature": data["main"]["temp"],
-                    "condition": data["weather"][0]["description"],
-                    "timestamp": datetime.now().isoformat()
+            try:
+                weather_info = {
+                    "city": city,
+                    "data": {
+                        "location": data["name"],
+                        "temperature": data["main"]["temp"],
+                        "condition": data["weather"][0]["description"],
+                        "timestamp": datetime.now().isoformat()
+                    }
                 }
-            }
+            except (KeyError, ValueError, TypeError) as e:
+                return {"error": f"Unexpected response format: {e}"}
 
             # Cache the result
             self.cache[city_lower] = (weather_info, time.time())
@@ -85,12 +92,22 @@ class WeatherDashboard:
             print(f"Condition: {data['condition'].capitalize()}")
             print(f"Timestamp: {data['timestamp']}\n")
 
+
 if __name__ == "__main__":
-    city = input("Enter city name: ").strip()
-
     dashboard = WeatherDashboard()
-    weather = dashboard.fetch_weather(city)
-    dashboard.display_weather(weather)
 
-    if "error" not in weather:
-        dashboard.save_to_history(weather)
+    # Check for API key before proceeding
+    if not dashboard.api_key:
+        print("❌ Error: Missing API key. Please set WEATHER_API_KEY in your .env file.")
+    else:
+        # Check API key with a known valid city
+        test_response = dashboard.fetch_weather("London")
+        if "error" in test_response and "Invalid API key" in test_response["error"]:
+            print(f"❌ Error: {test_response['error']}")
+        else:
+            city = input("Enter city name: ").strip()
+            weather = dashboard.fetch_weather(city)
+            dashboard.display_weather(weather)
+
+            if "error" not in weather:
+                dashboard.save_to_history(weather)

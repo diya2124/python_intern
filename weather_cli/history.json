@@ -108,5 +108,14 @@
       "condition": "clear sky",
       "timestamp": "2025-04-30T12:00:37.929322"
     }
+  },
+  {
+    "city": "thrissur",
+    "data": {
+      "location": "Thrissur",
+      "temperature": 32.24,
+      "condition": "overcast clouds",
+      "timestamp": "2025-04-30T13:03:53.850110"
+    }
   }
 ]
