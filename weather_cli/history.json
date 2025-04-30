@@ -135,5 +135,32 @@
       "condition": "clear sky",
       "timestamp": "2025-04-30T13:32:37.510909"
     }
+  },
+  {
+    "city": "delhi",
+    "data": {
+      "location": "Delhi",
+      "temperature": 36.55,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T15:36:29.192917"
+    }
+  },
+  {
+    "city": "goa",
+    "data": {
+      "location": "Goa",
+      "temperature": 33.93,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T15:43:11.508435"
+    }
+  },
+  {
+    "city": "goa",
+    "data": {
+      "location": "Goa",
+      "temperature": 33.93,
+      "condition": "clear sky",
+      "timestamp": "2025-04-30T15:47:48.181400"
+    }
   }
 ]
