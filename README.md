@@ -64,3 +64,37 @@ Timestamp: 2025-04-30T15:30:10
 # Not found
   Error: No such city found: UnknownCity
 
+  
+
+  # 📝 Personal Task Manager (SQLite + Python)
+
+This is a simple **command-line task manager** built with **Python** and **SQLite**.  
+It allows users to add, view, update, and delete tasks, along with tracking their statuses.
+
+---
+
+##  Features
+
+- Create and store tasks with:
+  - Title
+  - Due Date
+  - Priority (Low / Medium / High)
+  - Status (pending / completed)
+- View all tasks in a clean list
+- Update or delete any task by ID
+- View task statistics (completed vs. pending)
+- Interactive CLI menu
+- Uses `.env` file to keep database configuration safe
+- Compatible with SQLite extension in VS Code
+
+---
+
+##  Technologies Used
+
+- Python 3.x
+- SQLite
+- VS Code
+- [SQLite extension by Alexey Samoshkin](https://marketplace.visualstudio.com/items?itemName=alexcvzz.vscode-sqlite)
+- `dotenv` for environment variables
+
+
