@@ -42,11 +42,11 @@ def add_task_flow():
             raise ValueError("Priority must be Low, Medium, or High.")
 
         create_task(title, due_date, priority)
-        print("✅ Task added successfully!")
+        print(" Task added successfully!")
     except ValueError as ve:
-        print(f"❌ Input Error: {ve}")
+        print(f" Input Error: {ve}")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
 
 def view_tasks():
     try:
@@ -57,7 +57,7 @@ def view_tasks():
             for task in tasks:
                 print(f"ID: {task[0]} | Title: {task[1]} | Due: {task[2]} | Priority: {task[3]} | Status: {task[4]}")
     except Exception as e:
-        print(f"❌ Error retrieving tasks: {e}")
+        print(f" Error retrieving tasks: {e}")
 
 def update_task_flow():
     try:
@@ -79,11 +79,11 @@ def update_task_flow():
             raise ValueError("Status must be 'pending' or 'completed'.")
 
         update_task(task_id, title, due_date, priority, status)
-        print("✅ Task updated!")
+        print(" Task updated!")
     except ValueError as ve:
-        print(f"❌ Input Error: {ve}")
+        print(f" Input Error: {ve}")
     except Exception as e:
-        print(f"❌ Error updating task: {e}")
+        print(f" Error updating task: {e}")
 
 def delete_task_flow():
     try:
@@ -91,9 +91,9 @@ def delete_task_flow():
         delete_task(task_id)
         print("✅ Task deleted!")
     except ValueError as ve:
-        print(f"❌ Input Error: {ve}")
+        print(f" Input Error: {ve}")
     except Exception as e:
-        print(f"❌ Error deleting task: {e}")
+        print(f" Error deleting task: {e}")
 
 def view_stats():
     try:
@@ -102,7 +102,7 @@ def view_stats():
         for status, count in stats:
             print(f"{status.capitalize()}: {count} task(s)")
     except Exception as e:
-        print(f"❌ Error fetching stats: {e}")
+        print(f" Error fetching stats: {e}")
 
 def main():
     create_tasks_table()
@@ -121,10 +121,10 @@ def main():
         elif choice == "5":
             view_stats()
         elif choice == "6":
-            print("👋 Goodbye!")
+            print(" Goodbye!")
             break
         else:
-            print("❗ Invalid choice. Please enter a number from 1 to 6.")
+            print(" Invalid choice. Please enter a number from 1 to 6.")
 
 if __name__ == "__main__":
     main()
