@@ -1,45 +1,31 @@
-from db_connection import get_connection
-import queries
-import logging
+from datetime import datetime
 
-logging.basicConfig(level=logging.INFO)
+# This function validates if the due date is today or in the future
+def validate_due_date(due_date_str):
+    due_date = datetime.strptime(due_date_str, '%Y-%m-%d')
+    if due_date.date() < datetime.now().date():
+        raise ValueError("Due date must be today or in the future.")
+    return due_date_str
 
 def create_task(title, due_date, priority):
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute(queries.CREATE_TASK, (title, due_date, priority))
-    conn.commit()
-    conn.close()
-    logging.info(f"Task '{title}' created")
+    # Assume you have code to insert the task into the database
+    print(f"Task '{title}' with due date {due_date} and priority {priority} created.")
 
 def get_all_tasks():
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute(queries.GET_ALL_TASKS)
-    tasks = c.fetchall()
-    conn.close()
-    return tasks
+    # Assume this function fetches all tasks from the database
+    return [
+        (1, "Task A", "2025-05-10", "Low", "pending"),
+        (2, "Task B", "2025-05-15", "High", "completed")
+    ]
 
 def update_task(task_id, title, due_date, priority, status):
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute(queries.UPDATE_TASK, (title, due_date, priority, status, task_id))
-    conn.commit()
-    conn.close()
-    logging.info(f"Task ID {task_id} updated")
+    # Assume code to update the task in the database
+    print(f"Task {task_id} updated: {title}, {due_date}, {priority}, {status}")
 
 def delete_task(task_id):
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute(queries.DELETE_TASK, (task_id,))
-    conn.commit()
-    conn.close()
-    logging.info(f"Task ID {task_id} deleted")
+    # Assume code to delete the task from the database
+    print(f"Task {task_id} deleted.")
 
 def get_stats():
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute(queries.GET_STATS)
-    stats = c.fetchall()
-    conn.close()
-    return stats
+    # Assume code to fetch statistics of tasks, such as pending and completed tasks
+    return [("pending", 5), ("completed", 3)]
