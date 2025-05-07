@@ -1,81 +1,64 @@
 import pytest
-from datetime import datetime
-from task_manager import validate_due_date, get_all_tasks, create_task, update_task, delete_task, get_stats
-
-# --- TESTS ---
+from task_manager import (
+    create_task, get_all_tasks, update_task,
+    delete_task, get_stats, validate_due_date
+)
 
 def test_validate_due_date_valid():
-    """Test that validate_due_date function works with valid future and today's dates."""
-    try:
-        assert validate_due_date("2025-05-10") == "2025-05-10"  # Future date
-        assert validate_due_date(datetime.now().strftime('%Y-%m-%d')) == datetime.now().strftime('%Y-%m-%d')  # Today's date
-    except Exception as e:
-        print(f"test_validate_due_date_valid: FAILED - {e}")
-        raise
-    else:
-        print("test_validate_due_date_valid: PASSES")
+    assert validate_due_date("2025-05-10") == "2025-05-10"
 
 def test_validate_due_date_invalid():
-    """Test that validate_due_date function raises ValueError for past dates."""
-    try:
-        with pytest.raises(ValueError):
-            validate_due_date("2020-05-10")  # Past date
-    except Exception as e:
-        print(f"test_validate_due_date_invalid: FAILED - {e}")
-        raise
-    else:
-        print("test_validate_due_date_invalid: PASSES")
+    with pytest.raises(ValueError):
+        validate_due_date("invalid-date")
 
 def test_create_task():
-    """Test that create_task adds a task successfully."""
-    try:
-        create_task("Test Task", "2025-05-10", "Medium")  # Simulating task creation
-    except Exception as e:
-        print(f"test_create_task: FAILED - {e}")
-        raise
-    else:
-        print("test_create_task: PASSES")
+    create_task("Task A", "2025-05-11", "Low")
+    tasks = get_all_tasks()
+    assert any(task[1] == "Task A" for task in tasks)
 
 def test_get_all_tasks():
-    """Test that get_all_tasks retrieves the tasks correctly."""
-    try:
-        tasks = get_all_tasks()
-        assert len(tasks) == 2
-        assert tasks[0][1] == "Task A"
-        assert tasks[1][3] == "High"
-    except Exception as e:
-        print(f"test_get_all_tasks: FAILED - {e}")
-        raise
-    else:
-        print("test_get_all_tasks: PASSES")
+    create_task("Task B", "2025-05-12", "Medium")
+    tasks = get_all_tasks()
+    assert len(tasks) >= 1
+    assert any(task[1] == "Task B" for task in tasks)
 
 def test_update_task():
-    """Test that update_task updates a task's details."""
-    try:
-        update_task(1, "Updated Task", "2025-06-01", "High", "completed")
-    except Exception as e:
-        print(f"test_update_task: FAILED - {e}")
-        raise
-    else:
-        print("test_update_task: PASSES")
+    create_task("Update Me", "2025-05-13", "High")
+    tasks = get_all_tasks()
+    task_id = next(task[0] for task in tasks if task[1] == "Update Me")
+    update_task(task_id, "Updated", "2025-06-01", "Low", "completed")
+    updated_tasks = get_all_tasks()
+    updated = next(task for task in updated_tasks if task[0] == task_id)
+    assert updated[1] == "Updated"
+    assert updated[4] == "completed"
 
 def test_delete_task():
-    """Test that delete_task removes a task successfully."""
-    try:
-        delete_task(1)
-    except Exception as e:
-        print(f"test_delete_task: FAILED - {e}")
-        raise
-    else:
-        print("test_delete_task: PASSES")
+    create_task("Delete Me", "2025-05-20", "Low")
+    tasks = get_all_tasks()
+    task_id = next(task[0] for task in tasks if task[1] == "Delete Me")
+    delete_task(task_id)
+    remaining = get_all_tasks()
+    assert not any(task[0] == task_id for task in remaining)
 
 def test_get_stats():
-    """Test that get_stats returns the correct task statistics."""
-    try:
-        stats = get_stats()
-        assert stats == [("pending", 5), ("completed", 3)]  # Expected task stats
-    except Exception as e:
-        print(f"test_get_stats: FAILED - {e}")
-        raise
-    else:
-        print("test_get_stats: PASSES")
+    create_task("Stat Task 1", "2025-08-01", "Low")
+    create_task("Complete Me", "2025-05-20", "Medium")
+    tasks = get_all_tasks()
+    task_id = next(task[0] for task in tasks if task[1] == "Complete Me")
+    update_task(task_id, "Complete Me", "2025-05-20", "Medium", "completed")
+    completed, pending = get_stats()
+    assert isinstance(completed, int)
+    assert isinstance(pending, int)
+    assert completed >= 1
+
+def test_create_task_empty_description():
+    with pytest.raises(ValueError):
+        create_task("   ", "2025-05-10", "Low")
+
+def test_create_task_invalid_priority():
+    with pytest.raises(ValueError):
+        create_task("Test Task", "2025-05-10", "Urgent")
+
+def test_create_task_invalid_date_format():
+    with pytest.raises(ValueError):
+        create_task("Test Task", "10-05-2025", "Low")

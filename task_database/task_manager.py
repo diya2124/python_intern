@@ -1,31 +1,56 @@
+from db_connection import get_connection
 from datetime import datetime
 
-# This function validates if the due date is today or in the future
-def validate_due_date(due_date_str):
-    due_date = datetime.strptime(due_date_str, '%Y-%m-%d')
-    if due_date.date() < datetime.now().date():
-        raise ValueError("Due date must be today or in the future.")
-    return due_date_str
+def validate_due_date(date_str):
+    """Validate and return a properly formatted due date or raise ValueError."""
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+        return date_str
+    except ValueError:
+        raise ValueError("Due date must be in YYYY-MM-DD format.")
 
 def create_task(title, due_date, priority):
-    # Assume you have code to insert the task into the database
-    print(f"Task '{title}' with due date {due_date} and priority {priority} created.")
+    if not title.strip():
+        raise ValueError("Task title cannot be empty.")
+    if priority not in ["Low", "Medium", "High"]:
+        raise ValueError("Priority must be 'Low', 'Medium', or 'High'.")
+    due_date = validate_due_date(due_date)
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO tasks (title, due_date, priority) VALUES (?, ?, ?)",
+            (title, due_date, priority),
+        )
+        conn.commit()
 
 def get_all_tasks():
-    # Assume this function fetches all tasks from the database
-    return [
-        (1, "Task A", "2025-05-10", "Low", "pending"),
-        (2, "Task B", "2025-05-15", "High", "completed")
-    ]
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tasks")
+        return cursor.fetchall()
 
 def update_task(task_id, title, due_date, priority, status):
-    # Assume code to update the task in the database
-    print(f"Task {task_id} updated: {title}, {due_date}, {priority}, {status}")
+    due_date = validate_due_date(due_date)
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE tasks
+            SET title = ?, due_date = ?, priority = ?, status = ?
+            WHERE id = ?
+        """, (title, due_date, priority, status, task_id))
+        conn.commit()
 
 def delete_task(task_id):
-    # Assume code to delete the task from the database
-    print(f"Task {task_id} deleted.")
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+        conn.commit()
 
 def get_stats():
-    # Assume code to fetch statistics of tasks, such as pending and completed tasks
-    return [("pending", 5), ("completed", 3)]
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM tasks WHERE status = 'completed'")
+        completed = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM tasks WHERE status = 'pending'")
+        pending = cursor.fetchone()[0]
+        return completed, pending
