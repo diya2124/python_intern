@@ -1,8 +1,8 @@
 from db_setup import create_tasks_table
 from task_manager import create_task, get_all_tasks, update_task, delete_task, get_stats
+from datetime import datetime
 
 def display_menu():
-    """Display the main menu options for the task manager."""
     print("\n==== Personal Task Manager ====")
     print("1. Add New Task")
     print("2. View All Tasks")
@@ -11,55 +11,101 @@ def display_menu():
     print("5. View Task Stats")
     print("6. Exit")
 
-def add_task_flow():
-    """Prompt user to input task details and add the task to the database."""
-    title = input("Enter task title: ")
-    due_date = input("Enter due date (YYYY-MM-DD): ")
-    priority = input("Enter priority (Low, Medium, High): ")
-    create_task(title, due_date, priority)
-    print("Task added successfully!")
+def validate_due_date(due_date_str):
+    due_date = datetime.strptime(due_date_str, '%Y-%m-%d')
+    if due_date.date() < datetime.now().date():
+        raise ValueError("Due date must be today or in the future.")
+    return due_date_str
 
-def view_tasks():
-    """Retrieve and display all tasks from the database."""
+def get_valid_task_id():
     tasks = get_all_tasks()
     if not tasks:
-        print("No tasks found.")
-    else:
-        for task in tasks:
-            print(f"ID: {task[0]} | Title: {task[1]} | Due: {task[2]} | Priority: {task[3]} | Status: {task[4]}")
+        raise ValueError("No tasks available.")
+    view_tasks()
+    task_ids = [str(task[0]) for task in tasks]
+    task_id = input("Enter the task ID: ").strip()
+    if task_id not in task_ids:
+        raise ValueError("Invalid task ID.")
+    return int(task_id)
+
+def add_task_flow():
+    try:
+        title = input("Enter task title: ").strip()
+        if not title:
+            raise ValueError("Title cannot be empty.")
+
+        due_date = input("Enter due date (YYYY-MM-DD): ").strip()
+        due_date = validate_due_date(due_date)
+
+        priority = input("Enter priority (Low, Medium, High): ").strip().capitalize()
+        if priority not in ["Low", "Medium", "High"]:
+            raise ValueError("Priority must be Low, Medium, or High.")
+
+        create_task(title, due_date, priority)
+        print("✅ Task added successfully!")
+    except ValueError as ve:
+        print(f"❌ Input Error: {ve}")
+    except Exception as e:
+        print(f"❌ Error: {e}")
+
+def view_tasks():
+    try:
+        tasks = get_all_tasks()
+        if not tasks:
+            print("No tasks found.")
+        else:
+            for task in tasks:
+                print(f"ID: {task[0]} | Title: {task[1]} | Due: {task[2]} | Priority: {task[3]} | Status: {task[4]}")
+    except Exception as e:
+        print(f"❌ Error retrieving tasks: {e}")
 
 def update_task_flow():
-    """Prompt user to select and update an existing task."""
-    view_tasks()  # Display existing tasks to help select ID
-    task_id = int(input("Enter the ID of the task to update: "))
-    title = input("New title: ")
-    due_date = input("New due date (YYYY-MM-DD): ")
-    priority = input("New priority (Low, Medium, High): ")
-    status = input("Status (pending/completed): ")
-    update_task(task_id, title, due_date, priority, status)
-    print("Task updated!")
+    try:
+        task_id = get_valid_task_id()
+
+        title = input("New title: ").strip()
+        if not title:
+            raise ValueError("Title cannot be empty.")
+
+        due_date = input("New due date (YYYY-MM-DD): ").strip()
+        due_date = validate_due_date(due_date)
+
+        priority = input("New priority (Low, Medium, High): ").strip().capitalize()
+        if priority not in ["Low", "Medium", "High"]:
+            raise ValueError("Priority must be Low, Medium, or High.")
+
+        status = input("Status (pending/completed): ").strip().lower()
+        if status not in ["pending", "completed"]:
+            raise ValueError("Status must be 'pending' or 'completed'.")
+
+        update_task(task_id, title, due_date, priority, status)
+        print("✅ Task updated!")
+    except ValueError as ve:
+        print(f"❌ Input Error: {ve}")
+    except Exception as e:
+        print(f"❌ Error updating task: {e}")
 
 def delete_task_flow():
-    """Prompt user to delete a task by ID."""
-    view_tasks()  # Show current tasks
-    task_id = int(input("Enter the ID of the task to delete: "))
-    delete_task(task_id)
-    print("Task deleted!")
+    try:
+        task_id = get_valid_task_id()
+        delete_task(task_id)
+        print("✅ Task deleted!")
+    except ValueError as ve:
+        print(f"❌ Input Error: {ve}")
+    except Exception as e:
+        print(f"❌ Error deleting task: {e}")
 
 def view_stats():
-    """Display statistics of completed vs pending tasks."""
-    stats = get_stats()
-    print("\n=== Task Stats ===")
-    for status, count in stats:
-        print(f"{status.capitalize()}: {count} task(s)")
+    try:
+        stats = get_stats()
+        print("\n=== Task Stats ===")
+        for status, count in stats:
+            print(f"{status.capitalize()}: {count} task(s)")
+    except Exception as e:
+        print(f"❌ Error fetching stats: {e}")
 
 def main():
-    """
-    Main driver function for the task manager.
-    It displays the menu and routes user input to the appropriate functions.
-    """
-    create_tasks_table()  # Ensure the table exists before any operations
-
+    create_tasks_table()
     while True:
         display_menu()
         choice = input("Select an option (1-6): ")
@@ -75,11 +121,10 @@ def main():
         elif choice == "5":
             view_stats()
         elif choice == "6":
-            print("Goodbye!")
+            print("👋 Goodbye!")
             break
         else:
-            print("Invalid choice. Please enter a number from 1 to 6.")
+            print("❗ Invalid choice. Please enter a number from 1 to 6.")
 
-# Entry point for the script
 if __name__ == "__main__":
     main()
