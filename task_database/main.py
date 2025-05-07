@@ -89,7 +89,7 @@ def delete_task_flow():
     try:
         task_id = get_valid_task_id()
         delete_task(task_id)
-        print("✅ Task deleted!")
+        print(" Task deleted!")
     except ValueError as ve:
         print(f" Input Error: {ve}")
     except Exception as e:
