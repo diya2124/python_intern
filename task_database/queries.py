@@ -1,0 +1,5 @@
+CREATE_TASK = "INSERT INTO tasks (title, due_date, priority) VALUES (?, ?, ?)"
+GET_ALL_TASKS = "SELECT * FROM tasks"
+UPDATE_TASK = "UPDATE tasks SET title=?, due_date=?, priority=?, status=? WHERE id=?"
+DELETE_TASK = "DELETE FROM tasks WHERE id=?"
+GET_STATS = "SELECT status, COUNT(*) FROM tasks GROUP BY status"
