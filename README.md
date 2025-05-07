@@ -66,7 +66,7 @@ Timestamp: 2025-04-30T15:30:10
 
   
 
-  # 📝 Personal Task Manager (SQLite + Python)
+  #  Personal Task Manager (SQLite + Python)
 
 This is a simple **command-line task manager** built with **Python** and **SQLite**.  
 It allows users to add, view, update, and delete tasks, along with tracking their statuses.
