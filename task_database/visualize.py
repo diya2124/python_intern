@@ -23,6 +23,10 @@ def show_chart():
     plt.xlabel("Query")  # Label for the x-axis
     plt.title("Query Performance Benchmark")  # Title for the chart
     plt.xticks(rotation=45, ha="right")  # Rotate x-axis labels for better readability
+
+    # Apply logarithmic scaling to y-axis for better visualization
+    plt.yscale("log")
+
     plt.tight_layout()  # Adjust layout to prevent clipping
     plt.savefig("performance_chart.png")  # Save the chart as a PNG file
     plt.show()  # Display the chart

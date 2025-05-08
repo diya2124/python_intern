@@ -1,61 +1,65 @@
 import sqlite3
 import time
-import csv  # Add csv import to avoid any issues when writing to CSV
+import csv
+import os  # Import os for file existence check
 
-from db_connection import get_connection  # Importing the function to get database connection
+from db_connection import get_connection
 
-# List of queries to benchmark
+# List of queries to benchmark (including INSERT, UPDATE, DELETE)
 QUERIES = [
-    "SELECT * FROM tasks",  # Select all tasks from the table
-    "SELECT COUNT(*) FROM tasks",  # Get the total number of tasks
-    "SELECT * FROM tasks WHERE priority='High'",  # Select tasks with 'High' priority
-    "SELECT * FROM tasks ORDER BY due_date",  # Select tasks ordered by due date
+    "SELECT * FROM tasks",
+    "SELECT COUNT(*) FROM tasks",
+    "SELECT * FROM tasks WHERE priority='High'",
+    "SELECT * FROM tasks ORDER BY due_date",
+    "INSERT INTO tasks (title, priority, due_date) VALUES ('New Task', 'Medium', '2025-12-31')",
+    "UPDATE tasks SET priority='Low' WHERE priority='High'",
+    "DELETE FROM tasks WHERE priority='Low'"
 ]
 
 def benchmark_queries():
     """
-    This function benchmarks the performance of several SQL queries on the 'tasks' table.
-    It executes each query 100 times, measures the average execution time, and writes
-    the results to a CSV file.
-
-    Queries are predefined in the QUERIES list, and the average execution time for each
-    query is calculated by dividing the total time by the number of executions.
+    Benchmarks the performance of various SQL queries on the 'tasks' table.
+    Executes each query 100 times, records execution time, and appends results to a CSV file.
     """
 
-    # Initialize a list to store the benchmark results
     results = []
+    
+    try:
+        # Open database connection once
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    # Iterate through each query in the list
-    for query in QUERIES:
-        conn = get_connection()  # Establish a database connection
-        cursor = conn.cursor()  # Create a cursor object to interact with the database
+        for query in QUERIES:
+            start_time = time.time()
 
-        # Record the start time for benchmarking
-        start_time = time.time()
+            for _ in range(100):
+                try:
+                    cursor.execute(query)
+                    if query.startswith("SELECT"):
+                        cursor.fetchall()  # Ensure SELECT queries are fully executed
+                    else:
+                        conn.commit()  # Commit changes for INSERT/UPDATE/DELETE
+                except sqlite3.Error as e:
+                    print(f"Error executing query: {query} - {e}")
 
-        # Execute the query 100 times to get an average execution time
-        for _ in range(100):
-            cursor.execute(query)
-            cursor.fetchall()  # Fetch all results (to ensure query is fully executed)
+            end_time = time.time()
+            avg_time = round((end_time - start_time) / 100, 6)
 
-        # Record the end time after the 100 executions
-        end_time = time.time()
+            results.append({"Query": query, "Avg Time (s)": avg_time})
 
-        # Calculate the average time per execution (rounded to 6 decimal places)
-        avg_time = round((end_time - start_time) / 100, 6)
+        conn.close()  # Close connection after all queries
 
-        # Append the results in dictionary format to the results list
-        results.append({"Query": query, "Avg Time (s)": avg_time})
+        # Check if file exists, append results if it does
+        file_exists = os.path.exists("results.csv")
+        with open("results.csv", "a" if file_exists else "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=["Query", "Avg Time (s)"])
+            if not file_exists:
+                writer.writeheader()  # Write header only if file is new
+            writer.writerows(results)  # Append results
 
-        # Close the database connection
-        conn.close()
+    except sqlite3.Error as e:
+        print(f"Database connection error: {e}")
 
-    # Write the benchmark results to a CSV file
-    with open("results.csv", "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["Query", "Avg Time (s)"])
-        writer.writeheader()  # Write the header row
-        writer.writerows(results)  # Write all the benchmark results
-
-# Main function to trigger the benchmarking process
+# Run the benchmarking process
 if __name__ == "__main__":
-    benchmark_queries()  # Run the benchmark queries when the script is executed
+    benchmark_queries()
