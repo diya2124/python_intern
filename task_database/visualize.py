@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 def show_chart():
     """
     This function reads the benchmark results from 'results.csv' and generates
-    a horizontal bar chart to visualize the average execution time of each SQL query.
+    a vertical bar chart to visualize the average execution time of each SQL query.
     The chart is saved as 'performance_chart.png' and also displayed.
 
     The CSV file is expected to have columns: "Query" and "Avg Time (s)".
@@ -13,11 +13,16 @@ def show_chart():
     # Read the benchmark results from the CSV file into a DataFrame
     df = pd.read_csv("results.csv")
 
+    # Generate unique colors for each bar
+    colors = plt.cm.get_cmap("tab10", len(df))  # Using 'tab10' colormap
+
     # Plotting
-    plt.figure(figsize=(10, 6))  # Set the figure size
-    plt.barh(df["Query"], df["Avg Time (s)"], color="skyblue")  # Create horizontal bar chart
-    plt.xlabel("Average Time (s)")  # Label for the x-axis
+    plt.figure(figsize=(12, 6))  # Set the figure size
+    plt.bar(df["Query"], df["Avg Time (s)"], color=[colors(i) for i in range(len(df))])  # Vertical bar chart
+    plt.ylabel("Average Time (s)")  # Label for the y-axis
+    plt.xlabel("Query")  # Label for the x-axis
     plt.title("Query Performance Benchmark")  # Title for the chart
+    plt.xticks(rotation=45, ha="right")  # Rotate x-axis labels for better readability
     plt.tight_layout()  # Adjust layout to prevent clipping
     plt.savefig("performance_chart.png")  # Save the chart as a PNG file
     plt.show()  # Display the chart
