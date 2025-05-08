@@ -1,0 +1,5 @@
+Query,Avg Time (s)
+SELECT * FROM tasks,4.9e-05
+SELECT COUNT(*) FROM tasks,2e-05
+SELECT * FROM tasks WHERE priority='High',2.6e-05
+SELECT * FROM tasks ORDER BY due_date,6.3e-05
