@@ -1,0 +1,12 @@
+Query,Avg Time (s)
+SELECT * FROM tasks,4.9e-05
+SELECT COUNT(*) FROM tasks,2e-05
+SELECT * FROM tasks WHERE priority='High',2.6e-05
+SELECT * FROM tasks ORDER BY due_date,6.3e-05
+SELECT * FROM tasks,0.000127
+SELECT COUNT(*) FROM tasks,4.6e-05
+SELECT * FROM tasks WHERE priority='High',4.1e-05
+SELECT * FROM tasks ORDER BY due_date,5.9e-05
+"INSERT INTO tasks (title, priority, due_date) VALUES ('New Task', 'Medium', '2025-12-31')",0.00346
+UPDATE tasks SET priority='Low' WHERE priority='High',0.000103
+DELETE FROM tasks WHERE priority='Low',6.4e-05
