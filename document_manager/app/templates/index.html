@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="mb-4 text-center">📄 Document Manager</h1>
+
+        <!-- Upload Form -->
+        <div class="card mb-5">
+            <div class="card-header bg-primary text-white">Upload a Document</div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Choose File (PDF or Markdown)</label>
+                        <input type="file" name="file" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" name="category" class="form-control" placeholder="Enter category" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Upload</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Search Form -->
+        <div class="mb-4">
+            <form method="GET" class="d-flex">
+                <input type="text" name="q" class="form-control me-2" placeholder="Search documents...">
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </form>
+        </div>
+
+        <!-- Documents List -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Uploaded Documents</div>
+            <ul class="list-group list-group-flush">
+                {% for doc in documents %}
+                    <li class="list-group-item">
+                        <strong>{{ doc.filename }}</strong>
+                        <span class="badge bg-info text-dark ms-2">{{ doc.category }}</span>
+                        <span class="text-muted float-end">{{ doc.upload_time }}</span>
+                    </li>
+                {% else %}
+                    <li class="list-group-item text-muted">No documents uploaded yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
