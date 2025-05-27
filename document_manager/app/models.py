@@ -16,7 +16,8 @@ def init_db():
             filename TEXT NOT NULL,
             category TEXT NOT NULL,
             content TEXT,
-            filepath TEXT NOT NULL
+            filepath TEXT NOT NULL,
+            upload_time TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
     conn.commit()
@@ -33,6 +34,6 @@ def insert_document(filename, category, content, filepath):
 
 def get_all_documents():
     conn = get_db_connection()
-    docs = conn.execute('SELECT * FROM documents').fetchall()
+    docs = conn.execute('SELECT * FROM documents ORDER BY upload_time DESC').fetchall()
     conn.close()
     return docs

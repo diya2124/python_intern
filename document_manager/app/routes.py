@@ -1,39 +1,32 @@
 import os
-from flask import (
-    Blueprint, request, render_template, redirect, url_for, flash, current_app
-)
+from flask import Blueprint, request, render_template, redirect, url_for, current_app
 from werkzeug.utils import secure_filename
 from .models import insert_document, get_all_documents
 from .utils import allowed_file, extract_text
 
 routes = Blueprint('routes', __name__)
 
-@routes.route('/', methods=['GET', 'POST'])
+@routes.route('/', methods=['GET'])
 def index():
-    if request.method == 'POST':
-        file = request.files.get('file')
-        category = request.form.get('category')
+    documents = get_all_documents()
+    return render_template('index.html', documents=documents)
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            upload_folder = current_app.config['UPLOAD_FOLDER']
-            os.makedirs(upload_folder, exist_ok=True)  # ensure folder exists
+@routes.route('/upload', methods=['POST'])
+def upload_file():
+    file = request.files.get('file')
+    category = request.form.get('category')
 
-            filepath = os.path.join(upload_folder, filename)
-            file.save(filepath)
+    if not file or not allowed_file(file.filename):
+        return 'Invalid file type or missing file', 400
 
-            # Extract searchable text content
-            content = extract_text(filepath)
+    filename = secure_filename(file.filename)
+    upload_folder = current_app.config['UPLOAD_FOLDER']
+    os.makedirs(upload_folder, exist_ok=True)
 
-            # Save metadata + content to DB
-            insert_document(filename, category, content, filepath)
+    filepath = os.path.join(upload_folder, filename)
+    file.save(filepath)
 
+    content = extract_text(filepath)
+    insert_document(filename, category, content, filepath)
 
-
-            flash('File uploaded successfully!')
-            return redirect(url_for('routes.index'))
-        else:
-            flash('Invalid file type. Only PDF and Markdown allowed.')
-
-    docs = get_all_documents()
-    return render_template('index.html', documents=docs)
+    return redirect(url_for('routes.index'))
